@@ -1,0 +1,38 @@
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+.venv/
+venv/
+env/
+convert_temp_env/
+.env
+
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Large Zip files or backups
+*.zip
+*.tar.gz
+*.rar
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Large models not used in app.py
+nlp_recommendation_model.keras
+nlp_recommendation_model_config.json
+
+# Notebooks (tidak perlu untuk production)
+*.ipynb
+CAPSTONE.ipynb
+convert_model.ipynb
+
+# Unused local folders containing TFJS layers/backups
+Sistem Rekomendasi/
+
