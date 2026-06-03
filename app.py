@@ -41,7 +41,7 @@ else:
     print(f"Warning: Rating model not found at {model_rating_path}")
 
 if os.path.exists(model_rec_path):
-    model_rec = tf.keras.models.load_model(model_rec_path)
+    model_rec = tf.keras.models.load_model(model_rec_path, custom_objects={'CustomDenseBlock': CustomDenseBlock})
     print("Recommendation model loaded successfully.")
 else:
     print(f"Warning: Recommendation model not found at {model_rec_path}")
