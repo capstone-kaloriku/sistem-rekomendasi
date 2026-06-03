@@ -1,0 +1,26 @@
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+.venv/
+venv/
+env/
+convert_temp_env/
+.env
+
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Large Zip files or backups
+*.zip
+*.tar.gz
+*.rar
+
+# OS specific files
+.DS_Store
+Thumbs.db
+

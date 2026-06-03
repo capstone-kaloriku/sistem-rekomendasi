@@ -1,0 +1,1492 @@
+{
+    "module": "keras.src.models.functional",
+    "class_name": "Functional",
+    "config": {
+        "name": "NLP_Recommendation_Model",
+        "trainable": true,
+        "layers": [
+            {
+                "module": "keras.layers",
+                "class_name": "InputLayer",
+                "config": {
+                    "batch_shape": [
+                        null,
+                        1
+                    ],
+                    "dtype": "string",
+                    "sparse": false,
+                    "ragged": false,
+                    "name": "title_input",
+                    "optional": false
+                },
+                "registered_name": null,
+                "name": "title_input",
+                "inbound_nodes": []
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "InputLayer",
+                "config": {
+                    "batch_shape": [
+                        null,
+                        1
+                    ],
+                    "dtype": "string",
+                    "sparse": false,
+                    "ragged": false,
+                    "name": "ingredients_input",
+                    "optional": false
+                },
+                "registered_name": null,
+                "name": "ingredients_input",
+                "inbound_nodes": []
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "InputLayer",
+                "config": {
+                    "batch_shape": [
+                        null,
+                        1
+                    ],
+                    "dtype": "string",
+                    "sparse": false,
+                    "ragged": false,
+                    "name": "steps_input",
+                    "optional": false
+                },
+                "registered_name": null,
+                "name": "steps_input",
+                "inbound_nodes": []
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "TextVectorization",
+                "config": {
+                    "name": "text_vectorization",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null
+                    },
+                    "max_tokens": 20000,
+                    "standardize": "lower_and_strip_punctuation",
+                    "split": "whitespace",
+                    "ngrams": null,
+                    "output_mode": "int",
+                    "output_sequence_length": 50,
+                    "pad_to_max_tokens": false,
+                    "sparse": false,
+                    "ragged": false,
+                    "vocabulary": null,
+                    "idf_weights": null,
+                    "encoding": "utf-8",
+                    "vocabulary_size": 4021
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        1
+                    ]
+                },
+                "name": "text_vectorization",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        1
+                                    ],
+                                    "dtype": "string",
+                                    "keras_history": [
+                                        "title_input",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "TextVectorization",
+                "config": {
+                    "name": "text_vectorization_1",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "max_tokens": 20000,
+                    "standardize": "lower_and_strip_punctuation",
+                    "split": "whitespace",
+                    "ngrams": null,
+                    "output_mode": "int",
+                    "output_sequence_length": 200,
+                    "pad_to_max_tokens": false,
+                    "sparse": false,
+                    "ragged": false,
+                    "vocabulary": null,
+                    "idf_weights": null,
+                    "encoding": "utf-8",
+                    "vocabulary_size": 20000
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        1
+                    ]
+                },
+                "name": "text_vectorization_1",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        1
+                                    ],
+                                    "dtype": "string",
+                                    "keras_history": [
+                                        "ingredients_input",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "TextVectorization",
+                "config": {
+                    "name": "text_vectorization_2",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "max_tokens": 20000,
+                    "standardize": "lower_and_strip_punctuation",
+                    "split": "whitespace",
+                    "ngrams": null,
+                    "output_mode": "int",
+                    "output_sequence_length": 300,
+                    "pad_to_max_tokens": false,
+                    "sparse": false,
+                    "ragged": false,
+                    "vocabulary": null,
+                    "idf_weights": null,
+                    "encoding": "utf-8",
+                    "vocabulary_size": 20000
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        1
+                    ]
+                },
+                "name": "text_vectorization_2",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        1
+                                    ],
+                                    "dtype": "string",
+                                    "keras_history": [
+                                        "steps_input",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "InputLayer",
+                "config": {
+                    "batch_shape": [
+                        null,
+                        1
+                    ],
+                    "dtype": "string",
+                    "sparse": false,
+                    "ragged": false,
+                    "name": "categorical_input",
+                    "optional": false
+                },
+                "registered_name": null,
+                "name": "categorical_input",
+                "inbound_nodes": []
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "Embedding",
+                "config": {
+                    "name": "embedding",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "input_dim": 4021,
+                    "output_dim": 64,
+                    "embeddings_initializer": {
+                        "module": "keras.initializers",
+                        "class_name": "RandomUniform",
+                        "config": {
+                            "seed": null,
+                            "minval": -0.05,
+                            "maxval": 0.05
+                        },
+                        "registered_name": null
+                    },
+                    "embeddings_regularizer": null,
+                    "activity_regularizer": null,
+                    "embeddings_constraint": null,
+                    "mask_zero": true,
+                    "quantization_config": null
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        50
+                    ]
+                },
+                "name": "embedding",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        50
+                                    ],
+                                    "dtype": "int64",
+                                    "keras_history": [
+                                        "text_vectorization",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.src.ops.numpy",
+                "class_name": "NotEqual",
+                "config": {
+                    "name": "not_equal"
+                },
+                "registered_name": "NotEqual",
+                "name": "not_equal",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        50
+                                    ],
+                                    "dtype": "int64",
+                                    "keras_history": [
+                                        "text_vectorization",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            },
+                            0
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "Embedding",
+                "config": {
+                    "name": "embedding_1",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "input_dim": 20000,
+                    "output_dim": 64,
+                    "embeddings_initializer": {
+                        "module": "keras.initializers",
+                        "class_name": "RandomUniform",
+                        "config": {
+                            "seed": null,
+                            "minval": -0.05,
+                            "maxval": 0.05
+                        },
+                        "registered_name": null
+                    },
+                    "embeddings_regularizer": null,
+                    "activity_regularizer": null,
+                    "embeddings_constraint": null,
+                    "mask_zero": true,
+                    "quantization_config": null
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        200
+                    ]
+                },
+                "name": "embedding_1",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        200
+                                    ],
+                                    "dtype": "int64",
+                                    "keras_history": [
+                                        "text_vectorization_1",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.src.ops.numpy",
+                "class_name": "NotEqual",
+                "config": {
+                    "name": "not_equal_1"
+                },
+                "registered_name": "NotEqual",
+                "name": "not_equal_1",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        200
+                                    ],
+                                    "dtype": "int64",
+                                    "keras_history": [
+                                        "text_vectorization_1",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            },
+                            0
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "Embedding",
+                "config": {
+                    "name": "embedding_2",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "input_dim": 20000,
+                    "output_dim": 64,
+                    "embeddings_initializer": {
+                        "module": "keras.initializers",
+                        "class_name": "RandomUniform",
+                        "config": {
+                            "seed": null,
+                            "minval": -0.05,
+                            "maxval": 0.05
+                        },
+                        "registered_name": null
+                    },
+                    "embeddings_regularizer": null,
+                    "activity_regularizer": null,
+                    "embeddings_constraint": null,
+                    "mask_zero": true,
+                    "quantization_config": null
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        300
+                    ]
+                },
+                "name": "embedding_2",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        300
+                                    ],
+                                    "dtype": "int64",
+                                    "keras_history": [
+                                        "text_vectorization_2",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.src.ops.numpy",
+                "class_name": "NotEqual",
+                "config": {
+                    "name": "not_equal_2"
+                },
+                "registered_name": "NotEqual",
+                "name": "not_equal_2",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        300
+                                    ],
+                                    "dtype": "int64",
+                                    "keras_history": [
+                                        "text_vectorization_2",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            },
+                            0
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "StringLookup",
+                "config": {
+                    "name": "string_lookup_3",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "invert": false,
+                    "max_tokens": null,
+                    "num_oov_indices": 1,
+                    "oov_token": "[UNK]",
+                    "mask_token": null,
+                    "output_mode": "int",
+                    "sparse": false,
+                    "pad_to_max_tokens": false,
+                    "idf_weights": null,
+                    "vocabulary": [
+                        "ayam",
+                        "ikan",
+                        "kambing",
+                        "lain-lain",
+                        "sapi",
+                        "tahu",
+                        "telur",
+                        "tempe",
+                        "udang"
+                    ],
+                    "vocabulary_size": 10,
+                    "encoding": "utf-8"
+                },
+                "registered_name": null,
+                "build_config": {},
+                "name": "string_lookup_3",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        1
+                                    ],
+                                    "dtype": "string",
+                                    "keras_history": [
+                                        "categorical_input",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "GlobalAveragePooling1D",
+                "config": {
+                    "name": "global_average_pooling1d",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "data_format": "channels_last",
+                    "keepdims": false
+                },
+                "registered_name": null,
+                "name": "global_average_pooling1d",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        50,
+                                        64
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "embedding",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {
+                            "mask": {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        50
+                                    ],
+                                    "dtype": "bool",
+                                    "keras_history": [
+                                        "not_equal",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "GlobalAveragePooling1D",
+                "config": {
+                    "name": "global_average_pooling1d_1",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "data_format": "channels_last",
+                    "keepdims": false
+                },
+                "registered_name": null,
+                "name": "global_average_pooling1d_1",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        200,
+                                        64
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "embedding_1",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {
+                            "mask": {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        200
+                                    ],
+                                    "dtype": "bool",
+                                    "keras_history": [
+                                        "not_equal_1",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "GlobalAveragePooling1D",
+                "config": {
+                    "name": "global_average_pooling1d_2",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "data_format": "channels_last",
+                    "keepdims": false
+                },
+                "registered_name": null,
+                "name": "global_average_pooling1d_2",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        300,
+                                        64
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "embedding_2",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {
+                            "mask": {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        300
+                                    ],
+                                    "dtype": "bool",
+                                    "keras_history": [
+                                        "not_equal_2",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "InputLayer",
+                "config": {
+                    "batch_shape": [
+                        null,
+                        2
+                    ],
+                    "dtype": "float32",
+                    "sparse": false,
+                    "ragged": false,
+                    "name": "numerical_input",
+                    "optional": false
+                },
+                "registered_name": null,
+                "name": "numerical_input",
+                "inbound_nodes": []
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "CategoryEncoding",
+                "config": {
+                    "name": "food_category_one_hot",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "num_tokens": 9,
+                    "output_mode": "one_hot"
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        1
+                    ]
+                },
+                "name": "food_category_one_hot",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        1
+                                    ],
+                                    "dtype": "int64",
+                                    "keras_history": [
+                                        "string_lookup_3",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": null,
+                "class_name": "CustomDenseBlock",
+                "config": {
+                    "name": "title_dense_block",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "units": 64,
+                    "activation": "relu",
+                    "use_batchnorm": true
+                },
+                "registered_name": "CustomDenseBlock",
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        64
+                    ]
+                },
+                "name": "title_dense_block",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        64
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "global_average_pooling1d",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": null,
+                "class_name": "CustomDenseBlock",
+                "config": {
+                    "name": "ingredients_dense_block",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "units": 64,
+                    "activation": "relu",
+                    "use_batchnorm": true
+                },
+                "registered_name": "CustomDenseBlock",
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        64
+                    ]
+                },
+                "name": "ingredients_dense_block",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        64
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "global_average_pooling1d_1",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": null,
+                "class_name": "CustomDenseBlock",
+                "config": {
+                    "name": "steps_dense_block",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "units": 64,
+                    "activation": "relu",
+                    "use_batchnorm": true
+                },
+                "registered_name": "CustomDenseBlock",
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        64
+                    ]
+                },
+                "name": "steps_dense_block",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        64
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "global_average_pooling1d_2",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": null,
+                "class_name": "CustomDenseBlock",
+                "config": {
+                    "name": "numerical_dense_block",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "units": 32,
+                    "activation": "relu",
+                    "use_batchnorm": true
+                },
+                "registered_name": "CustomDenseBlock",
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        2
+                    ]
+                },
+                "name": "numerical_dense_block",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        2
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "numerical_input",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": null,
+                "class_name": "CustomDenseBlock",
+                "config": {
+                    "name": "categorical_dense_block",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "units": 32,
+                    "activation": "relu",
+                    "use_batchnorm": true
+                },
+                "registered_name": "CustomDenseBlock",
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        9
+                    ]
+                },
+                "name": "categorical_dense_block",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        9
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "food_category_one_hot",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "Concatenate",
+                "config": {
+                    "name": "fused_features",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "axis": -1
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        [
+                            null,
+                            64
+                        ],
+                        [
+                            null,
+                            64
+                        ],
+                        [
+                            null,
+                            64
+                        ],
+                        [
+                            null,
+                            32
+                        ],
+                        [
+                            null,
+                            32
+                        ]
+                    ]
+                },
+                "name": "fused_features",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            [
+                                {
+                                    "class_name": "__keras_tensor__",
+                                    "config": {
+                                        "shape": [
+                                            null,
+                                            64
+                                        ],
+                                        "dtype": "float32",
+                                        "keras_history": [
+                                            "title_dense_block",
+                                            0,
+                                            0
+                                        ]
+                                    }
+                                },
+                                {
+                                    "class_name": "__keras_tensor__",
+                                    "config": {
+                                        "shape": [
+                                            null,
+                                            64
+                                        ],
+                                        "dtype": "float32",
+                                        "keras_history": [
+                                            "ingredients_dense_block",
+                                            0,
+                                            0
+                                        ]
+                                    }
+                                },
+                                {
+                                    "class_name": "__keras_tensor__",
+                                    "config": {
+                                        "shape": [
+                                            null,
+                                            64
+                                        ],
+                                        "dtype": "float32",
+                                        "keras_history": [
+                                            "steps_dense_block",
+                                            0,
+                                            0
+                                        ]
+                                    }
+                                },
+                                {
+                                    "class_name": "__keras_tensor__",
+                                    "config": {
+                                        "shape": [
+                                            null,
+                                            32
+                                        ],
+                                        "dtype": "float32",
+                                        "keras_history": [
+                                            "numerical_dense_block",
+                                            0,
+                                            0
+                                        ]
+                                    }
+                                },
+                                {
+                                    "class_name": "__keras_tensor__",
+                                    "config": {
+                                        "shape": [
+                                            null,
+                                            32
+                                        ],
+                                        "dtype": "float32",
+                                        "keras_history": [
+                                            "categorical_dense_block",
+                                            0,
+                                            0
+                                        ]
+                                    }
+                                }
+                            ]
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": null,
+                "class_name": "CustomDenseBlock",
+                "config": {
+                    "name": "fused_dense_1",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "units": 128,
+                    "activation": "relu",
+                    "use_batchnorm": true
+                },
+                "registered_name": "CustomDenseBlock",
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        256
+                    ]
+                },
+                "name": "fused_dense_1",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        256
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "fused_features",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": null,
+                "class_name": "CustomDenseBlock",
+                "config": {
+                    "name": "fused_dense_2",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "units": 64,
+                    "activation": "relu",
+                    "use_batchnorm": true
+                },
+                "registered_name": "CustomDenseBlock",
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        128
+                    ]
+                },
+                "name": "fused_dense_2",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        128
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "fused_dense_1",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            },
+            {
+                "module": "keras.layers",
+                "class_name": "Dense",
+                "config": {
+                    "name": "recipe_embedding_output",
+                    "trainable": true,
+                    "dtype": {
+                        "module": "keras",
+                        "class_name": "DTypePolicy",
+                        "config": {
+                            "name": "float32"
+                        },
+                        "registered_name": null,
+                        "shared_object_id": 136396240659296
+                    },
+                    "units": 32,
+                    "activation": "linear",
+                    "use_bias": true,
+                    "kernel_initializer": {
+                        "module": "keras.initializers",
+                        "class_name": "GlorotUniform",
+                        "config": {
+                            "seed": null
+                        },
+                        "registered_name": null
+                    },
+                    "bias_initializer": {
+                        "module": "keras.initializers",
+                        "class_name": "Zeros",
+                        "config": {},
+                        "registered_name": null
+                    },
+                    "kernel_regularizer": null,
+                    "bias_regularizer": null,
+                    "kernel_constraint": null,
+                    "bias_constraint": null,
+                    "quantization_config": null
+                },
+                "registered_name": null,
+                "build_config": {
+                    "input_shape": [
+                        null,
+                        64
+                    ]
+                },
+                "name": "recipe_embedding_output",
+                "inbound_nodes": [
+                    {
+                        "args": [
+                            {
+                                "class_name": "__keras_tensor__",
+                                "config": {
+                                    "shape": [
+                                        null,
+                                        64
+                                    ],
+                                    "dtype": "float32",
+                                    "keras_history": [
+                                        "fused_dense_2",
+                                        0,
+                                        0
+                                    ]
+                                }
+                            }
+                        ],
+                        "kwargs": {}
+                    }
+                ]
+            }
+        ],
+        "input_layers": [
+            [
+                "title_input",
+                0,
+                0
+            ],
+            [
+                "ingredients_input",
+                0,
+                0
+            ],
+            [
+                "steps_input",
+                0,
+                0
+            ],
+            [
+                "numerical_input",
+                0,
+                0
+            ],
+            [
+                "categorical_input",
+                0,
+                0
+            ]
+        ],
+        "output_layers": [
+            "recipe_embedding_output",
+            0,
+            0
+        ]
+    },
+    "registered_name": "Functional",
+    "build_config": {
+        "input_shape": null
+    },
+    "compile_config": {
+        "optimizer": {
+            "module": "keras.optimizers",
+            "class_name": "Adam",
+            "config": {
+                "name": "adam",
+                "learning_rate": 0.0010000000474974513,
+                "weight_decay": null,
+                "clipnorm": null,
+                "global_clipnorm": null,
+                "clipvalue": null,
+                "use_ema": false,
+                "ema_momentum": 0.99,
+                "ema_overwrite_frequency": null,
+                "loss_scale_factor": null,
+                "gradient_accumulation_steps": null,
+                "beta_1": 0.9,
+                "beta_2": 0.999,
+                "epsilon": 1e-07,
+                "amsgrad": false
+            },
+            "registered_name": null
+        },
+        "loss": {
+            "module": "keras.losses",
+            "class_name": "MeanSquaredError",
+            "config": {
+                "name": "mean_squared_error",
+                "reduction": "sum_over_batch_size"
+            },
+            "registered_name": null
+        },
+        "loss_weights": null,
+        "metrics": [
+            {
+                "module": "keras.metrics",
+                "class_name": "MeanAbsoluteError",
+                "config": {
+                    "name": "mae",
+                    "dtype": "float32"
+                },
+                "registered_name": null
+            }
+        ],
+        "weighted_metrics": null,
+        "run_eagerly": false,
+        "steps_per_execution": 1,
+        "jit_compile": false
+    }
+}
