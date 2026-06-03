@@ -27,19 +27,28 @@ class CustomDenseBlock(tf.keras.layers.Layer):
 
 app = Flask(__name__)
 
-# Global variable for the model
-model_path = './best_rating_prediction_model.keras'
-model = None
+# Global variables for the models
+model_rating_path = './best_rating_prediction_model.keras'
+model_rec_path = './nlp_recommendation_model.keras'
 
-if os.path.exists(model_path):
-    model = tf.keras.models.load_model(model_path, custom_objects={'CustomDenseBlock': CustomDenseBlock})
-    print("Model loaded successfully.")
+model_rating = None
+model_rec = None
+
+if os.path.exists(model_rating_path):
+    model_rating = tf.keras.models.load_model(model_rating_path, custom_objects={'CustomDenseBlock': CustomDenseBlock})
+    print("Rating model loaded successfully.")
 else:
-    print(f"Warning: Model not found at {model_path}")
+    print(f"Warning: Rating model not found at {model_rating_path}")
+
+if os.path.exists(model_rec_path):
+    model_rec = tf.keras.models.load_model(model_rec_path)
+    print("Recommendation model loaded successfully.")
+else:
+    print(f"Warning: Recommendation model not found at {model_rec_path}")
 
 @app.route('/predict_rating', methods=['POST'])
-def predict():
-    if model is None: return jsonify({"error": "Model not available"}), 500
+def predict_rating():
+    if model_rating is None: return jsonify({"error": "Rating model not available"}), 500
     data = request.json
     try:
         inputs = {
@@ -49,8 +58,26 @@ def predict():
             'numerical_input_hp': tf.constant([[data['jumlah_kalori_normalized'], data['usia_normalized']]], dtype=tf.float32),
             'categorical_input_hp': tf.constant([data['Food_Category']], dtype=tf.string)
         }
-        pred = model.predict(inputs)
+        pred = model_rating.predict(inputs)
         return jsonify({"predicted_rating": float(pred[0][0])})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/predict_embedding', methods=['POST'])
+def predict_embedding():
+    if model_rec is None: return jsonify({"error": "Recommendation model not available"}), 500
+    data = request.json
+    try:
+        # Inputs untuk model nlp_recommendation_model menggunakan key tanpa suffix '_hp'
+        inputs = {
+            'title_input': tf.constant([data['Title_processed']], dtype=tf.string),
+            'ingredients_input': tf.constant([data['Ingredients_processed']], dtype=tf.string),
+            'steps_input': tf.constant([data['Steps_processed']], dtype=tf.string),
+            'numerical_input': tf.constant([[data['jumlah_kalori_normalized'], data['usia_normalized']]], dtype=tf.float32),
+            'categorical_input': tf.constant([data['Food_Category']], dtype=tf.string)
+        }
+        pred = model_rec.predict(inputs)
+        return jsonify({"predicted_embedding": pred[0].tolist()})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
