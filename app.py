@@ -1,7 +1,20 @@
 import tensorflow as tf
 import numpy as np
 from flask import Flask, request, jsonify, render_template_string
+from flask_swagger_ui import get_swaggerui_blueprint
 import os
+
+# Patch Keras base Layer class to bypass 'quantization_config' compatibility issues in Keras 3
+try:
+    from keras.layers import Layer
+    orig_layer_init = Layer.__init__
+    def patched_layer_init(self, *args, **kwargs):
+        kwargs.pop('quantization_config', None)
+        orig_layer_init(self, *args, **kwargs)
+    Layer.__init__ = patched_layer_init
+    print("Keras Layer base class successfully patched for Keras 3 compatibility.")
+except Exception as e:
+    print(f"Warning: Failed to patch Keras Layer: {e}")
 
 # Define the Custom Layer required for loading the model
 class CustomDenseBlock(tf.keras.layers.Layer):
@@ -25,7 +38,24 @@ class CustomDenseBlock(tf.keras.layers.Layer):
         config.update({'units': self.units, 'activation': self.activation, 'use_batchnorm': self.use_batchnorm})
         return config
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
+
+# --- Swagger UI Configuration ---
+SWAGGER_URL = '/docs'
+API_URL = '/static/swagger.json'
+swagger_ui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Sistem Rekomendasi API - KaloriKu",
+        'layout': "BaseLayout",
+        'docExpansion': "list",
+        'defaultModelsExpandDepth': 2,
+        'defaultModelExpandDepth': 2,
+        'tryItOutEnabled': True
+    }
+)
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 # Global variables for the models
 model_rating_path = './best_rating_prediction_model.keras'
@@ -282,6 +312,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   "usia_normalized": 0.35,
   "Food_Category": "Sayuran"
 }</pre>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/docs" style="display: inline-flex; align-items: center; gap: 0.75rem; background: linear-gradient(135deg, #818cf8, #6366f1); color: #fff; padding: 0.85rem 2rem; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(129, 140, 248, 0.35);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(129,140,248,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(129,140,248,0.35)'">
+                📖 Buka Swagger API Documentation
+            </a>
         </div>
 
         <div class="tech-stack">

@@ -1,0 +1,334 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Sistem Rekomendasi API - KaloriKu",
+    "description": "API untuk prediksi rating makanan sehat dan sistem rekomendasi berbasis NLP & Deep Learning.\n\n## Deskripsi\nAPI ini menyediakan dua layanan utama:\n1. **Predict Rating** — Memprediksi rating makanan berdasarkan input nutrisi, kategori makanan, dan detail resep menggunakan model deep learning.\n2. **Predict Embedding** — Menghasilkan vektor embedding berdimensi tinggi untuk representasi resep, yang digunakan untuk menghitung kemiripan dan rekomendasi makanan.\n\n## Tech Stack\n- **Backend:** Flask + Gunicorn\n- **ML Engine:** TensorFlow / Keras\n- **Deployment:** Docker on Hugging Face Spaces\n\n## Kategori Makanan yang Didukung\n`ayam`, `ikan`, `kambing`, `lain-lain`, `sapi`, `tahu`, `telur`, `tempe`, `udang`",
+    "version": "1.0.0",
+    "contact": {
+      "name": "KaloriKu Team"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Current Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Rating Prediction",
+      "description": "Endpoint untuk memprediksi rating makanan"
+    },
+    {
+      "name": "Recommendation",
+      "description": "Endpoint untuk menghasilkan embedding rekomendasi"
+    },
+    {
+      "name": "Health",
+      "description": "Endpoint untuk status kesehatan API"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Halaman Utama API",
+        "description": "Menampilkan halaman landing page API dengan informasi endpoint yang tersedia.",
+        "operationId": "getIndex",
+        "responses": {
+          "200": {
+            "description": "Halaman HTML berhasil dimuat",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predict_rating": {
+      "post": {
+        "tags": ["Rating Prediction"],
+        "summary": "Prediksi Rating Makanan",
+        "description": "Memprediksi rating makanan berdasarkan informasi resep dan data nutrisi.\n\nModel menggunakan arsitektur deep learning dengan:\n- **Text Vectorization** untuk judul, bahan, dan langkah resep\n- **Numerical Input** untuk kalori dan usia (normalized 0-1)\n- **Categorical Input** untuk kategori makanan\n\nOutput berupa nilai rating prediksi (float).",
+        "operationId": "predictRating",
+        "requestBody": {
+          "required": true,
+          "description": "Data resep dan informasi nutrisi untuk prediksi rating",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PredictionInput"
+              },
+              "examples": {
+                "sayur_bayam": {
+                  "summary": "Contoh: Sayur Bayam Bening",
+                  "value": {
+                    "Title_processed": "sayur bayam bening",
+                    "Ingredients_processed": "bayam, bawang merah, bawang putih, temu kunci, garam, air",
+                    "Steps_processed": "rebus air, masukkan bawang dan temu kunci, masukkan bayam, bumbui",
+                    "jumlah_kalori_normalized": 0.12,
+                    "usia_normalized": 0.35,
+                    "Food_Category": "lain-lain"
+                  }
+                },
+                "ayam_goreng": {
+                  "summary": "Contoh: Ayam Goreng Bumbu Kuning",
+                  "value": {
+                    "Title_processed": "ayam goreng bumbu kuning",
+                    "Ingredients_processed": "ayam, kunyit, bawang putih, bawang merah, ketumbar, garam, minyak goreng",
+                    "Steps_processed": "haluskan bumbu, lumuri ayam dengan bumbu, diamkan 30 menit, goreng hingga matang",
+                    "jumlah_kalori_normalized": 0.45,
+                    "usia_normalized": 0.5,
+                    "Food_Category": "ayam"
+                  }
+                },
+                "tempe_orek": {
+                  "summary": "Contoh: Tempe Orek Kering",
+                  "value": {
+                    "Title_processed": "tempe orek kering manis",
+                    "Ingredients_processed": "tempe, kecap manis, bawang merah, bawang putih, cabai, gula merah",
+                    "Steps_processed": "potong tempe tipis, goreng setengah matang, tumis bumbu, masukkan tempe, aduk rata",
+                    "jumlah_kalori_normalized": 0.28,
+                    "usia_normalized": 0.4,
+                    "Food_Category": "tempe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Prediksi rating berhasil",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingResponse"
+                },
+                "example": {
+                  "predicted_rating": 4.25
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request tidak valid — field tidak lengkap atau tipe data salah",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "KeyError: 'Title_processed'"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Model tidak tersedia di server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Rating model not available"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predict_embedding": {
+      "post": {
+        "tags": ["Recommendation"],
+        "summary": "Generate Embedding Rekomendasi",
+        "description": "Menghasilkan vektor embedding berdimensi tinggi dari data resep untuk digunakan dalam perhitungan kemiripan (cosine similarity) dan sistem rekomendasi.\n\nModel NLP menggunakan arsitektur serupa dengan model rating namun output berupa vektor embedding multidimensi yang merepresentasikan fitur resep.\n\n**Penggunaan:**\n- Hitung cosine similarity antara embedding untuk menemukan resep yang mirip\n- Gunakan untuk content-based filtering pada sistem rekomendasi",
+        "operationId": "predictEmbedding",
+        "requestBody": {
+          "required": true,
+          "description": "Data resep dan informasi nutrisi untuk generate embedding",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PredictionInput"
+              },
+              "examples": {
+                "sayur_bayam": {
+                  "summary": "Contoh: Sayur Bayam Bening",
+                  "value": {
+                    "Title_processed": "sayur bayam bening",
+                    "Ingredients_processed": "bayam, bawang merah, bawang putih, temu kunci, garam, air",
+                    "Steps_processed": "rebus air, masukkan bawang dan temu kunci, masukkan bayam, bumbui",
+                    "jumlah_kalori_normalized": 0.12,
+                    "usia_normalized": 0.35,
+                    "Food_Category": "lain-lain"
+                  }
+                },
+                "ikan_bakar": {
+                  "summary": "Contoh: Ikan Bakar Kecap",
+                  "value": {
+                    "Title_processed": "ikan bakar kecap manis",
+                    "Ingredients_processed": "ikan nila, kecap manis, jeruk nipis, bawang merah, cabai rawit, tomat",
+                    "Steps_processed": "bersihkan ikan, lumuri jeruk nipis, bakar di atas arang, siram kecap dan bumbu",
+                    "jumlah_kalori_normalized": 0.32,
+                    "usia_normalized": 0.45,
+                    "Food_Category": "ikan"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Embedding berhasil di-generate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbeddingResponse"
+                },
+                "example": {
+                  "predicted_embedding": [0.123, -0.456, 0.789, 0.012, -0.345, 0.678, 0.901, -0.234]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request tidak valid — field tidak lengkap atau tipe data salah",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "KeyError: 'Ingredients_processed'"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Model tidak tersedia di server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Recommendation model not available"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PredictionInput": {
+        "type": "object",
+        "required": [
+          "Title_processed",
+          "Ingredients_processed",
+          "Steps_processed",
+          "jumlah_kalori_normalized",
+          "usia_normalized",
+          "Food_Category"
+        ],
+        "properties": {
+          "Title_processed": {
+            "type": "string",
+            "description": "Judul resep yang sudah diproses (lowercase, tanpa karakter khusus)",
+            "example": "sayur bayam bening"
+          },
+          "Ingredients_processed": {
+            "type": "string",
+            "description": "Daftar bahan-bahan resep yang sudah diproses, dipisahkan dengan koma",
+            "example": "bayam, bawang merah, bawang putih, temu kunci, garam, air"
+          },
+          "Steps_processed": {
+            "type": "string",
+            "description": "Langkah-langkah memasak yang sudah diproses",
+            "example": "rebus air, masukkan bawang dan temu kunci, masukkan bayam, bumbui"
+          },
+          "jumlah_kalori_normalized": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Jumlah kalori yang sudah dinormalisasi ke rentang 0-1 menggunakan Min-Max Normalization",
+            "example": 0.12
+          },
+          "usia_normalized": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Usia pengguna yang sudah dinormalisasi ke rentang 0-1 menggunakan Min-Max Normalization",
+            "example": 0.35
+          },
+          "Food_Category": {
+            "type": "string",
+            "description": "Kategori makanan. Harus salah satu dari nilai yang didukung.",
+            "enum": [
+              "ayam",
+              "ikan",
+              "kambing",
+              "lain-lain",
+              "sapi",
+              "tahu",
+              "telur",
+              "tempe",
+              "udang"
+            ],
+            "example": "ayam"
+          }
+        }
+      },
+      "RatingResponse": {
+        "type": "object",
+        "properties": {
+          "predicted_rating": {
+            "type": "number",
+            "format": "float",
+            "description": "Nilai rating makanan yang diprediksi oleh model",
+            "example": 4.25
+          }
+        }
+      },
+      "EmbeddingResponse": {
+        "type": "object",
+        "properties": {
+          "predicted_embedding": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "float"
+            },
+            "description": "Vektor embedding berdimensi tinggi yang merepresentasikan fitur resep. Digunakan untuk menghitung kemiripan antar resep.",
+            "example": [0.123, -0.456, 0.789, 0.012, -0.345, 0.678]
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Pesan error yang menjelaskan penyebab kegagalan",
+            "example": "Rating model not available"
+          }
+        }
+      }
+    }
+  }
+}
