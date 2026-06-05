@@ -57,9 +57,42 @@ swagger_ui_blueprint = get_swaggerui_blueprint(
 )
 app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
+# Download helper to handle Git LFS files on platforms like Railway which don't support LFS cloning
+def download_model_if_needed(file_path, url, token=None):
+    if os.path.exists(file_path) and os.path.getsize(file_path) > 100 * 1024:
+        print(f"{file_path} exists and is valid. Skipping download.")
+        return
+    
+    print(f"Downloading {file_path} from Hugging Face...")
+    try:
+        import urllib.request
+        req = urllib.request.Request(url)
+        if token:
+            req.add_header('Authorization', f'Bearer {token}')
+        with urllib.request.urlopen(req) as response:
+            with open(file_path, 'wb') as out_file:
+                out_file.write(response.read())
+        print(f"Successfully downloaded {file_path}")
+    except Exception as e:
+        print(f"Error downloading {file_path}: {e}")
+
 # Global variables for the models
 model_rating_path = './best_rating_prediction_model.keras'
 model_rec_path = './nlp_recommendation_model.keras'
+
+# Trigger model download if files are Git LFS pointer files (which are usually < 1 KB)
+# Optional: Read token from env if the Space ever becomes private in the future
+hf_token = os.getenv('HF_TOKEN')
+download_model_if_needed(
+    model_rating_path, 
+    'https://huggingface.co/spaces/s4usan/sistem-rekomendasi/resolve/main/best_rating_prediction_model.keras',
+    hf_token
+)
+download_model_if_needed(
+    model_rec_path,
+    'https://huggingface.co/spaces/s4usan/sistem-rekomendasi/resolve/main/nlp_recommendation_model.keras',
+    hf_token
+)
 
 model_rating = None
 model_rec = None
