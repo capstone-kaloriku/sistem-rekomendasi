@@ -66,7 +66,10 @@ def download_model_if_needed(file_path, url, token=None):
     print(f"Downloading {file_path} from Hugging Face...")
     try:
         import urllib.request
+        import traceback
         req = urllib.request.Request(url)
+        # Add a standard browser User-Agent to bypass Cloudflare/bot blocks on cloud providers like Railway
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
         if token:
             req.add_header('Authorization', f'Bearer {token}')
         with urllib.request.urlopen(req) as response:
@@ -74,7 +77,9 @@ def download_model_if_needed(file_path, url, token=None):
                 out_file.write(response.read())
         print(f"Successfully downloaded {file_path}")
     except Exception as e:
-        print(f"Error downloading {file_path}: {e}")
+        print(f"CRITICAL ERROR: Failed to download {file_path} from {url}")
+        traceback.print_exc()
+        raise e
 
 # Global variables for the models
 model_rating_path = './best_rating_prediction_model.keras'
@@ -83,16 +88,22 @@ model_rec_path = './nlp_recommendation_model.keras'
 # Trigger model download if files are Git LFS pointer files (which are usually < 1 KB)
 # Optional: Read token from env if the Space ever becomes private in the future
 hf_token = os.getenv('HF_TOKEN')
-download_model_if_needed(
-    model_rating_path, 
-    'https://huggingface.co/spaces/s4usan/sistem-rekomendasi/resolve/main/best_rating_prediction_model.keras',
-    hf_token
-)
-download_model_if_needed(
-    model_rec_path,
-    'https://huggingface.co/spaces/s4usan/sistem-rekomendasi/resolve/main/nlp_recommendation_model.keras',
-    hf_token
-)
+try:
+    download_model_if_needed(
+        model_rating_path, 
+        'https://huggingface.co/spaces/s4usan/sistem-rekomendasi/resolve/main/best_rating_prediction_model.keras',
+        hf_token
+    )
+    download_model_if_needed(
+        model_rec_path,
+        'https://huggingface.co/spaces/s4usan/sistem-rekomendasi/resolve/main/nlp_recommendation_model.keras',
+        hf_token
+    )
+except Exception as e:
+    print(f"Startup aborted due to model download failure: {e}")
+    # Force exit to show error immediately in logs
+    import sys
+    sys.exit(1)
 
 model_rating = None
 model_rec = None
